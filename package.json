@@ -1,0 +1,14 @@
+{
+  "name": "sledje",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sledje — coming soon site (MERN stack)",
+  "scripts": {
+    "dev": "concurrently -n server,client -c magenta,cyan \"npm:dev --prefix server\" \"npm:dev --prefix client\"",
+    "install:all": "npm install --prefix server && npm install --prefix client",
+    "build": "npm run build --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

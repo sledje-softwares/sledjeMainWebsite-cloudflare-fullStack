@@ -1,0 +1,121 @@
+/*
+  Design tokens — single source of truth.
+  ----------------------------------------------------------------
+  Every color, spacing, font-size, radius, and motion value used
+  anywhere in the app should reference one of these custom
+  properties. Nothing in a component should hardcode a hex value
+  or an arbitrary pixel number — if a value is missing here, add
+  it here first, then consume it.
+
+  Color: 4 brand values (light mode) + dark-mode overrides behind
+  a `prefers-color-scheme` query, plus a small set of *derived*
+  tokens (muted text, borders, surfaces) computed from the brand
+  values so contrast stays predictable in both themes. Ratios are
+  documented next to each token — see README.md for the full
+  contrast audit.
+
+  Spacing & type: one modular scale, ratio 1.6, base 10px. The
+  same steps drive padding, margin, gaps, and font sizes — see
+  the "scale" block below. Semantic aliases (--font-size-body,
+  --space-section etc.) point at a specific step so components
+  never reference raw steps directly.
+*/
+
+:root {
+  color-scheme: light dark;
+
+  /* ---------------------------------------------------------------
+     BRAND COLOR — light mode (default)
+     --------------------------------------------------------------- */
+  --color-primary: #7a1f2b;      /* oxblood — primary actions, links, the signature tag/thread motif */
+  --color-secondary: #1f1c19;    /* near-black — footer surface, secondary UI */
+  --color-text: #1c1a17;         /* body text. 17.1:1 on --color-background (AAA) */
+  --color-background: #fdfdfd;   /* page background */
+
+  /* Derived from the four brand values above, for light mode. */
+  --color-surface: #ffffff;                 /* cards, form fields */
+  --color-text-muted: #6b6560;              /* secondary copy, helper text. 5.65:1 on background (AA) */
+  --color-border: #e2ddd5;                  /* hairlines, input borders */
+  --color-primary-contrast: #ffffff;        /* text/icons placed on a solid --color-primary fill. 10.2:1 (AAA) */
+  --color-secondary-contrast: #ffffff;      /* text/icons placed on a solid --color-secondary fill. 17:1 (AAA) */
+  --color-focus-ring: #7a1f2b;
+
+  /* Fixed, theme-independent. The wordmark PNG is near-black ink
+     on a transparent ground and must never be recolored, so in
+     dark mode it sits on this small always-light plate instead —
+     see Header.astro. Stays the same value in both color schemes. */
+  --color-logo-plate: #fdfdfd;
+
+  /* ---------------------------------------------------------------
+     MODULAR SCALE — ratio 1.6, base 10px
+     Used for every padding, margin, gap, and font-size in the app.
+     --------------------------------------------------------------- */
+  --space-3xs: 0.25rem;   /* 4px */
+  --space-2xs: 0.375rem;  /* 6px */
+  --space-xs: 0.625rem;   /* 10px  · base step */
+  --space-sm: 1rem;       /* 16px  · 10 × 1.6 */
+  --space-md: 1.625rem;   /* 26px  · 16 × 1.6 */
+  --space-lg: 2.5625rem;  /* 41px  · 26 × 1.6 */
+  --space-xl: 4.125rem;   /* 66px  · 41 × 1.6 */
+  --space-2xl: 6.5625rem; /* 105px · 66 × 1.6 */
+  --space-3xl: 10.5rem;   /* 168px · 105 × 1.6 */
+  --space-4xl: 16.75rem;  /* 268px · 168 × 1.6 */
+
+  /* Semantic type scale — each points at one scale step so text
+     sizes never drift from the shared spacing system. */
+  --font-size-caption: var(--space-xs);     /* 10px — eyebrows, badge, form labels */
+  --font-size-body: var(--space-sm);        /* 16px — paragraphs, buttons, inputs, footer */
+  --font-size-heading: var(--space-md);     /* 26px — section headings */
+  --font-size-display-sm: var(--space-md);  /* 26px — hero headline, mobile */
+  --font-size-display-lg: var(--space-lg);  /* 41px — hero headline, ≥768px */
+
+  /* Radius — same 1.6 relationship, small starting value. */
+  --radius-sm: 0.25rem;  /* 4px  — inputs, tag body */
+  --radius-md: 0.4rem;   /* 6.4px — buttons, cards */
+  --radius-lg: 0.65rem;  /* 10.4px — larger surfaces */
+  --radius-full: 999px;  /* pills */
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout */
+  --content-width: 40rem; /* the single reading column the whole page sits in */
+
+  /* Typography — display face matches the wordmark SVG (Newsreader,
+     optical size 72, weight 500); body face is IBM Plex Sans throughout. */
+  --font-display: 'Newsreader', 'Century Schoolbook', Georgia, serif;
+  --font-body: 'IBM Plex Sans', -apple-system, 'Segoe UI', sans-serif;
+}
+
+/* ---------------------------------------------------------------
+   DARK MODE — follows the OS/browser preference automatically.
+   No manual toggle: for a one-page notice like this, matching the
+   system is more reliable than adding UI chrome nobody asked for.
+   Only color tokens change; scale, type, and radius stay fixed.
+   --------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: #cb616e;              /* lightened oxblood — 4.78:1 on dark background (AA) for text/links */
+    --color-secondary: #0f0d0c;            /* near-black footer reads as the darkest surface, not a mid-tone */
+    --color-text: #f2efea;                 /* warm off-white. 15.99:1 on dark background (AAA) */
+    --color-background: #171412;           /* warm near-black, not neutral gray — stays in the oxblood family */
+
+    --color-surface: #1d1916;
+    --color-text-muted: #b8b2aa;           /* 8.72:1 on dark background (AAA) */
+    --color-border: #332d28;
+    --color-primary-contrast: #171412;     /* dark text on the lightened oxblood fill used for buttons */
+    --color-secondary-contrast: #f2efea;
+    --color-focus-ring: #cb616e;
+  }
+}
+
+/* Respect an explicit reduced-motion preference everywhere. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+  }
+}

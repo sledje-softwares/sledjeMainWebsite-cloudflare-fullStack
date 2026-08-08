@@ -1,0 +1,89 @@
+@import './tokens.css';
+
+/* ---------------------------------------------------------------
+   Reset
+   --------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  line-height: 1.6;
+  transition: background-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+/* ---------------------------------------------------------------
+   Focus — always visible, never removed. A registry that hides
+   the cursor is not one you'd trust.
+   --------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ---------------------------------------------------------------
+   Reveal-on-scroll — a single fade + slight rise, once per element.
+   `reveal.ts` toggles `.is-visible`. Reduced-motion users get the
+   end state immediately, no transition.
+   --------------------------------------------------------------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--space-sm));
+  transition: opacity var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

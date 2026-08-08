@@ -1,0 +1,72 @@
+---
+/**
+ * The page's one deliberate flourish: a small tag hanging by a
+ * thread, the way a case file is tagged in an Indian registry.
+ * Everything else on the page stays quiet so this can carry the
+ * "something is being made" feeling on its own.
+ *
+ * The sway animation is real motion applied to a real object
+ * (a tag actually would move slightly), not a decorative gradient
+ * bolted onto the hero — see README "Motion" section.
+ */
+interface Props {
+  label?: string;
+}
+
+const { label = 'Coming soon' } = Astro.props;
+---
+
+<div class="tag" data-reveal>
+  <span class="tag-thread" aria-hidden="true"></span>
+  <span class="tag-body">{label}</span>
+</div>
+
+<style>
+  .tag {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    transform-origin: top center;
+    animation: sway 7s var(--ease-standard) infinite alternate;
+  }
+
+  .tag-thread {
+    width: var(--space-2xs);
+    height: var(--space-md);
+    border: 1.5px solid var(--color-primary);
+    border-bottom: none;
+    border-radius: var(--radius-full) var(--radius-full) 0 0;
+    margin-bottom: -1px;
+  }
+
+  .tag-body {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-2xs) var(--space-sm);
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-primary);
+    font-family: var(--font-body);
+    font-size: var(--font-size-caption);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  @keyframes sway {
+    from {
+      transform: rotate(-1.25deg);
+    }
+    to {
+      transform: rotate(1.25deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tag {
+      animation: none;
+    }
+  }
+</style>

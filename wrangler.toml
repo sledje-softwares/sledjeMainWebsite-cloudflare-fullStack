@@ -1,0 +1,20 @@
+# Cloudflare Pages configuration.
+# `astro build` outputs a static site to ./dist; Pages serves that
+# directory and additionally runs anything in ./functions as
+# Pages Functions (see functions/api/interest.ts).
+#
+# Setup: see README.md → "Wiring the problem-capture form".
+
+name = "sledje-main-website"
+pages_build_output_dir = "dist"
+compatibility_date = "2025-01-01"
+
+# Created via `wrangler kv namespace create INTEREST_KV` — replace
+# both ids below with the ones that command prints, and add the
+# same binding in the Cloudflare dashboard for the deployed Pages
+# project (Settings → Functions → KV namespace bindings), since
+# this file only configures local `wrangler pages dev`.
+[[kv_namespaces]]
+binding = "INTEREST_KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+preview_id = "REPLACE_WITH_KV_PREVIEW_NAMESPACE_ID"

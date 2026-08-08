@@ -1,0 +1,298 @@
+---
+import { socials } from '../config/socials.config';
+---
+
+<section class="capture" data-reveal aria-labelledby="capture-heading">
+  <p class="eyebrow">Before we launch</p>
+  <h2 id="capture-heading">Tell us what slows your practice down</h2>
+  <p class="capture-intro">
+    A missed hearing date, a client message buried in chat, a file you
+    couldn't find in time for court — tell us the one that costs you the
+    most.
+  </p>
+
+  <form id="interest-form" novalidate>
+    <div class="field">
+      <label for="problem">What's slowing you down</label>
+      <textarea
+        id="problem"
+        name="problem"
+        rows="4"
+        required
+        placeholder="Describe the moment it went wrong — what happened, and what it cost you."
+      ></textarea>
+    </div>
+
+    <div class="field">
+      <label for="email">Email <span class="optional">(optional — so we can follow up)</span></label>
+      <input id="email" name="email" type="email" autocomplete="email" placeholder="you@chambers.in" />
+    </div>
+
+    <!-- Honeypot: hidden from real users and screen readers, catches basic bots. -->
+    <div class="hp-field" aria-hidden="true">
+      <label for="company">Leave this field blank</label>
+      <input id="company" name="company" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="btn-primary">
+        <span class="btn-label">Send</span>
+        <span class="btn-label btn-label-loading">Sending…</span>
+      </button>
+
+      {
+        socials.whatsappCommunity && (
+          <a class="community-link" href={socials.whatsappCommunity} target="_blank" rel="noopener noreferrer">
+            Prefer WhatsApp? Join the community →
+          </a>
+        )
+      }
+    </div>
+
+    <p class="form-status" role="status" aria-live="polite"></p>
+  </form>
+
+  <div class="success" hidden>
+    <p>
+      Noted — someone from the team reads every one of these. If you left an
+      email, we'll write back once there's something worth showing you.
+    </p>
+  </div>
+</section>
+
+<style>
+  .capture {
+    padding-block: var(--space-2xl);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .eyebrow {
+    margin: 0 0 var(--space-2xs);
+    color: var(--color-primary);
+    font-size: var(--font-size-caption);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: var(--font-size-heading);
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .capture-intro {
+    margin-top: var(--space-sm);
+    max-width: 56ch;
+    color: var(--color-text-muted);
+  }
+
+  form {
+    margin-top: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    max-width: 34rem;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+
+  label {
+    font-size: var(--font-size-body);
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .optional {
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
+  textarea,
+  input[type='email'],
+  input[type='text'] {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm);
+    font-size: var(--font-size-body);
+    resize: vertical;
+    transition: border-color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard);
+  }
+
+  textarea::placeholder,
+  input::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.8;
+  }
+
+  textarea:hover,
+  input:hover {
+    border-color: var(--color-primary);
+  }
+
+  textarea:focus-visible,
+  input:focus-visible {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 20%, transparent);
+  }
+
+  .hp-field {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin-top: var(--space-2xs);
+  }
+
+  .btn-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2xs) var(--space-lg);
+    background: var(--color-primary);
+    color: var(--color-primary-contrast);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-body);
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform var(--duration-fast) var(--ease-standard),
+      opacity var(--duration-fast) var(--ease-standard);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-primary:disabled {
+    cursor: progress;
+    opacity: 0.75;
+  }
+
+  .btn-label-loading {
+    display: none;
+  }
+
+  .btn-primary[aria-busy='true'] .btn-label {
+    display: none;
+  }
+
+  .btn-primary[aria-busy='true'] .btn-label-loading {
+    display: inline;
+  }
+
+  .community-link {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-body);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  .community-link:hover,
+  .community-link:focus-visible {
+    color: var(--color-primary);
+  }
+
+  .form-status {
+    margin: 0;
+    min-height: 1.2em;
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+  }
+
+  .form-status[data-state='error'] {
+    color: var(--color-primary);
+  }
+
+  .success {
+    margin-top: var(--space-lg);
+    max-width: 34rem;
+    padding: var(--space-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-primary);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#interest-form');
+  const successEl = document.querySelector<HTMLDivElement>('.success');
+  const statusEl = document.querySelector<HTMLParagraphElement>('.form-status');
+  const submitBtn = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form || !submitBtn) return;
+
+    const data = new FormData(form);
+    const problem = String(data.get('problem') ?? '').trim();
+    const email = String(data.get('email') ?? '').trim();
+    const honeypot = String(data.get('company') ?? '').trim();
+
+    if (!problem) {
+      if (statusEl) {
+        statusEl.textContent = 'Tell us what happened before you send this.';
+        statusEl.dataset.state = 'error';
+      }
+      form.querySelector<HTMLTextAreaElement>('#problem')?.focus();
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.setAttribute('aria-busy', 'true');
+    if (statusEl) {
+      statusEl.textContent = '';
+      statusEl.removeAttribute('data-state');
+    }
+
+    try {
+      const response = await fetch('/api/interest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ problem, email, company: honeypot }),
+      });
+
+      if (!response.ok) throw new Error('Request failed');
+
+      form.hidden = true;
+      if (successEl) {
+        successEl.hidden = false;
+        successEl.setAttribute('tabindex', '-1');
+        successEl.focus();
+      }
+    } catch {
+      if (statusEl) {
+        statusEl.textContent = "That didn't go through. Please try again in a moment.";
+        statusEl.dataset.state = 'error';
+      }
+      submitBtn.disabled = false;
+      submitBtn.removeAttribute('aria-busy');
+    }
+  });
+</script>

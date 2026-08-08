@@ -1,0 +1,45 @@
+---
+import favicon from '../assets/brand/favicon-full-j-oxblood.svg';
+import SocialIcons from './SocialIcons.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-row">
+    <img src={favicon.src} width="28" height="28" alt="Sledje" class="mark" />
+    <SocialIcons />
+  </div>
+  <p class="footer-copy">
+    &copy; {year} Sledje Softwares. Built for Indian legal professionals.
+  </p>
+</footer>
+
+<style>
+  .site-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-xl) var(--space-md);
+    background: var(--color-secondary);
+    color: var(--color-secondary-contrast);
+  }
+
+  .footer-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .mark {
+    border-radius: var(--radius-sm);
+  }
+
+  .footer-copy {
+    margin: 0;
+    color: color-mix(in srgb, var(--color-secondary-contrast) 65%, transparent);
+    font-size: var(--font-size-caption);
+    text-align: center;
+  }
+</style>

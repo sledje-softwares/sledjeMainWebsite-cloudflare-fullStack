@@ -1,0 +1,48 @@
+---
+import wordmark from '../assets/brand/wordmark-full-j-oxblood.svg';
+---
+
+<header class="site-header">
+  <a href="/" class="wordmark-link" aria-label="Sledje">
+    <img
+      src={wordmark.src}
+      width={wordmark.width}
+      height={wordmark.height}
+      alt="Sledje"
+      class="wordmark"
+      fetchpriority="high"
+    />
+  </a>
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    justify-content: center;
+    padding-block: var(--space-xl) var(--space-md);
+  }
+
+  .wordmark-link {
+    display: inline-flex;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--duration-base) var(--ease-standard);
+  }
+
+  .wordmark {
+    width: auto;
+    height: var(--space-lg);
+  }
+
+  /* The source artwork is fixed — near-black ink on a transparent
+     ground — and the brief asks that it never be recolored. On the
+     light page it sits directly on the background. On the dark page
+     that same near-black ink would disappear, so instead of touching
+     the file, we give it a small fixed-light plate to sit on, the
+     way a printed letterhead card would read pinned to a dark wall. */
+  @media (prefers-color-scheme: dark) {
+    .wordmark-link {
+      background-color: var(--color-logo-plate);
+      padding: var(--space-2xs) var(--space-sm);
+    }
+  }
+</style>

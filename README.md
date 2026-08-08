@@ -168,10 +168,13 @@ the same validation and honeypot logic.
 
 - Each section fades and rises into place once, the first time it enters
   the viewport (`src/scripts/reveal.ts` + `[data-reveal]` in `global.css`).
-- The "Coming soon" tag sways very slightly — the one ambient motion in the
-  hero, and it's motion applied to the signature element itself (a tag
-  actually hanging by a thread would move slightly) rather than a separate
-  decorative gradient.
+- The "Coming soon" text is set 1.6x the headline's size (one step up the
+  modular scale) and gets a single soft glint of light sweeping across it
+  every `--duration-sweep` (8s) — the one ambient motion in the hero, applied
+  to the signature element itself (`TagBadge.astro`) rather than a separate
+  decorative gradient. It's a `background-clip: text` gradient animation,
+  gated behind an `@supports` check so browsers without text-clip support
+  keep the plain solid color instead of invisible text.
 - Buttons and inputs get 150–220ms hover/focus transitions
   (`--duration-fast`, `--duration-base` in `tokens.css`).
 - Everything above is disabled under `prefers-reduced-motion: reduce`

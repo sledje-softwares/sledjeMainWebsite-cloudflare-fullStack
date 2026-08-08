@@ -3,6 +3,14 @@ import TagBadge from './TagBadge.astro';
 ---
 
 <section class="hero">
+  <!-- Ambient layer: a slow oxblood glow drifting behind a faint ruled-paper
+       grid — the texture of a legal pad, not a generic SaaS gradient blob.
+       Pure CSS, no JS, so it can never fail to render. -->
+  <div class="hero-ambient" aria-hidden="true">
+    <div class="hero-glow"></div>
+    <div class="hero-ruling"></div>
+  </div>
+
   <TagBadge label="Coming soon" />
 
   <h1 class="hero-headline" data-reveal>
@@ -17,12 +25,71 @@ import TagBadge from './TagBadge.astro';
 
 <style>
   .hero {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: var(--space-md);
     padding-block: var(--space-xl) var(--space-2xl);
+    isolation: isolate;
+    overflow: clip;
+  }
+
+  .hero-ambient {
+    position: absolute;
+    inset: calc(var(--space-xl) * -1) calc(var(--space-2xl) * -1) 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* A single warm glow, the size of a desk lamp's pool of light, drifting
+     slowly side to side. This is the brief's "barely-perceptible" ambient
+     motion — legible as alive, not as decoration. */
+  .hero-glow {
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    width: min(46rem, 140%);
+    aspect-ratio: 1;
+    background: radial-gradient(
+      closest-side,
+      color-mix(in srgb, var(--color-primary) 13%, transparent),
+      transparent 70%
+    );
+    transform: translateX(-50%);
+    animation: drift 16s var(--ease-standard) infinite alternate;
+  }
+
+  /* Faint horizontal rules, the spacing of a ruled legal pad — grounds the
+     glow in Sledje's actual paper world instead of reading as an abstract
+     gradient. */
+  .hero-ruling {
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-primary) 7%, transparent) 0,
+      color-mix(in srgb, var(--color-primary) 7%, transparent) 1px,
+      transparent 1px,
+      transparent var(--space-lg)
+    );
+    mask-image: linear-gradient(to bottom, black, transparent 85%);
+  }
+
+  @keyframes drift {
+    from {
+      translate: -4% 0;
+    }
+    to {
+      translate: 4% 6%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-glow {
+      animation: none;
+    }
   }
 
   .hero-headline {

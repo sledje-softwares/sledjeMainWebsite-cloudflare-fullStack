@@ -46,6 +46,11 @@
      see Header.astro. Stays the same value in both color schemes. */
   --color-logo-plate: #fdfdfd;
 
+  /* A glint of light passing over the "Coming soon" text — mixed
+     from --color-primary, so it re-derives automatically for dark
+     mode's lightened oxblood. See the sweep animation in Hero.astro. */
+  --color-sweep-highlight: color-mix(in srgb, var(--color-primary) 35%, #ffffff);
+
   /* ---------------------------------------------------------------
      MODULAR SCALE — ratio 1.6, base 10px
      Used for every padding, margin, gap, and font-size in the app.
@@ -68,6 +73,7 @@
   --font-size-heading: var(--space-md);     /* 26px — section headings */
   --font-size-display-sm: var(--space-md);  /* 26px — hero headline, mobile */
   --font-size-display-lg: var(--space-lg);  /* 41px — hero headline, ≥768px */
+  --font-size-display-xl: var(--space-xl);  /* 66px — "Coming soon" announcement text, ≥768px (1.6x the headline, one step up the scale) */
 
   /* Radius — same 1.6 relationship, small starting value. */
   --radius-sm: 0.25rem;  /* 4px  — inputs, tag body */
@@ -78,6 +84,7 @@
   /* Motion */
   --duration-fast: 150ms;
   --duration-base: 220ms;
+  --duration-sweep: 8s;  /* interval of the "Coming soon" light-sweep */
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -117,5 +124,6 @@
   :root {
     --duration-fast: 0ms;
     --duration-base: 0ms;
+    --duration-sweep: 0ms;
   }
 }

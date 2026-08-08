@@ -1,13 +1,15 @@
 ---
 /**
- * The page's one deliberate flourish: a small tag hanging by a
- * thread, the way a case file is tagged in an Indian registry.
- * Everything else on the page stays quiet so this can carry the
- * "something is being made" feeling on its own.
+ * The page's one deliberate flourish: the "Coming soon" announcement
+ * itself, set 1.6x the headline's size — one step up the modular
+ * scale — with a single soft glint of light sweeping across it every
+ * --duration-sweep — like light catching ink on a page, not a
+ * decorative gradient bolted onto the hero — see README "Motion".
  *
- * The sway animation is real motion applied to a real object
- * (a tag actually would move slightly), not a decorative gradient
- * bolted onto the hero — see README "Motion" section.
+ * Single text layer, one gradient: the non-highlight portion of the
+ * gradient is flat --color-primary, so at rest the glyphs render
+ * pixel-identical to plain colored text — no second copy of the text
+ * stacked on top to go out of alignment and read as blur.
  */
 interface Props {
   label?: string;
@@ -16,57 +18,60 @@ interface Props {
 const { label = 'Coming soon' } = Astro.props;
 ---
 
-<div class="tag" data-reveal>
-  <span class="tag-thread" aria-hidden="true"></span>
-  <span class="tag-body">{label}</span>
-</div>
+<p class="coming-soon" data-reveal>{label}</p>
 
 <style>
-  .tag {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    transform-origin: top center;
-    animation: sway 7s var(--ease-standard) infinite alternate;
-  }
-
-  .tag-thread {
-    width: var(--space-2xs);
-    height: var(--space-md);
-    border: 1.5px solid var(--color-primary);
-    border-bottom: none;
-    border-radius: var(--radius-full) var(--radius-full) 0 0;
-    margin-bottom: -1px;
-  }
-
-  .tag-body {
-    display: inline-flex;
-    align-items: center;
-    padding: var(--space-2xs) var(--space-sm);
-    border: 1px solid var(--color-primary);
-    border-radius: var(--radius-sm);
-    background: var(--color-surface);
-    color: var(--color-primary);
-    font-family: var(--font-body);
-    font-size: var(--font-size-caption);
+  .coming-soon {
+    font-family: var(--font-display);
+    font-size: var(--font-size-display-lg);
     font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    white-space: nowrap;
+    line-height: 1.1;
+    color: var(--color-primary);
   }
 
-  @keyframes sway {
-    from {
-      transform: rotate(-1.25deg);
+  /* The sweep only replaces the flat fill when the browser can clip a
+     background to text; unsupported browsers keep the plain solid
+     color above rather than risking invisible (transparent) text. */
+  @supports (background-clip: text) or (-webkit-background-clip: text) {
+    .coming-soon {
+      color: transparent;
+      background-image: linear-gradient(
+        100deg,
+        var(--color-primary) 47%,
+        var(--color-sweep-highlight) 50%,
+        var(--color-primary) 53%
+      );
+      background-size: 300% 100%;
+      background-position: 100% 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: sweep var(--duration-sweep) linear infinite;
     }
-    to {
-      transform: rotate(1.25deg);
+  }
+
+  /* One pass of light, then a rest for the remainder of the interval. */
+  @keyframes sweep {
+    0% {
+      background-position: 100% 0;
+    }
+    15% {
+      background-position: -100% 0;
+    }
+    100% {
+      background-position: -100% 0;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .tag {
+    .coming-soon {
       animation: none;
+      background-position: 0 0;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .coming-soon {
+      font-size: var(--font-size-display-xl);
     }
   }
 </style>

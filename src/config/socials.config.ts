@@ -13,11 +13,11 @@
 export type SocialKey = keyof typeof socials;
 
 export const socials = {
-  linkedin: '',
-  twitter: '',
-  instagram: '',
-  youtube: '',
-  whatsappCommunity: '',
+  linkedin: 'https://www.linkedin.com/in/sledje/',
+  twitter: 'https://x.com/sledje_onit',
+  instagram: 'https://www.instagram.com/sledjesoftwares/',
+  youtube: 'https://www.youtube.com/@Sledje',
+  whatsappCommunity: 'https://wa.me/9798157233',
 } satisfies Record<string, string>;
 
 /** Display labels used for aria-labels and alt text. Keep in sync with `socials`. */

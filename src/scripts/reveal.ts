@@ -31,4 +31,14 @@ export function initReveal(): void {
   );
 
   targets.forEach((el) => observer.observe(el));
+
+  // Safety net: content must never be permanently invisible just because
+  // a browser quirk kept the observer from firing (e.g. an element that's
+  // already fully in view on load in some layouts). If a section hasn't
+  // revealed itself within 2s, show it anyway — a late fade beats a
+  // section that silently never appears.
+  window.setTimeout(() => {
+    targets.forEach((el) => el.classList.add('is-visible'));
+    observer.disconnect();
+  }, 2000);
 }

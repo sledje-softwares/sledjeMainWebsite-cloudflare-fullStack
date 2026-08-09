@@ -1,22 +1,33 @@
-# Cloudflare Pages configuration.
-# `astro build` outputs a static site to ./dist; Pages serves that
-# directory and additionally runs anything in ./functions as
-# Pages Functions (see functions/api/interest.ts).
+# Cloudflare Worker configuration (static assets + API).
+# `astro build` outputs a static site to ./dist; the Worker serves
+# that directory as static assets via the [assets] block and handles
+# /api/* routes itself (see src/worker.ts).
 #
 # Setup: see README.md → "Wiring the problem-capture form".
 
-
-name = 'sledjemainwebsite-cloudflare-fullstack'
-pages_build_output_dir = "dist"
+name = "sledjemainwebsite-cloudflare-fullstack"
+main = "src/worker.ts"
 compatibility_date = "2025-01-01"
 
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
 # Created via `wrangler kv namespace create INTEREST_KV` — replace
-# both ids below with the ones that command prints, and add the
-# same binding in the Cloudflare dashboard for the deployed Pages
-# project (Settings → Functions → KV namespace bindings), since
-# this file only configures local `wrangler pages dev`.
+# both ids below with the ones that command prints, and add the same
+# binding in the Cloudflare dashboard (Settings → Bindings) if you
+# ever manage bindings there instead of via this file.
 [[kv_namespaces]]
 binding = "INTEREST_KV"
 id = "REPLACE_WITH_KV_NAMESPACE_ID"
 preview_id = "REPLACE_WITH_KV_PREVIEW_NAMESPACE_ID"
 
+# Email is sent via the Zoho Mail REST API (plain fetch(), no Cloudflare
+# binding — Cloudflare's own Email Service isn't available on this
+# account). Configure these as Worker secrets, NOT here — see
+# README.md → "Wiring the problem-capture form":
+#   npx wrangler secret put ZOHO_CLIENT_ID
+#   npx wrangler secret put ZOHO_CLIENT_SECRET
+#   npx wrangler secret put ZOHO_REFRESH_TOKEN
+#   npx wrangler secret put ZOHO_ACCOUNT_ID
+#   npx wrangler secret put ZOHO_FROM_ADDRESS

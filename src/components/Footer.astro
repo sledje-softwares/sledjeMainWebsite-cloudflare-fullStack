@@ -13,6 +13,7 @@ const year = new Date().getFullYear();
   <p class="footer-copy">
     &copy; {year} Sledje Softwares. Built for Indian legal professionals.
   </p>
+  <a class="footer-email" href="mailto:info@sledje.com">info@sledje.com</a>
 </footer>
 
 <style>
@@ -41,5 +42,18 @@ const year = new Date().getFullYear();
     color: color-mix(in srgb, var(--color-secondary-contrast) 65%, transparent);
     font-size: var(--font-size-caption);
     text-align: center;
+  }
+
+  .footer-email {
+    color: color-mix(in srgb, var(--color-secondary-contrast) 65%, transparent);
+    font-size: var(--font-size-caption);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  .footer-email:hover,
+  .footer-email:focus-visible {
+    color: var(--color-secondary-contrast);
   }
 </style>

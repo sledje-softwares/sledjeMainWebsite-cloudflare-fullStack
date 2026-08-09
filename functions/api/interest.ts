@@ -10,6 +10,49 @@
 
 interface Env {
   INTEREST_KV: KVNamespace;
+  EMAIL: SendEmail;
+}
+
+const NOTIFY_TO = 'info@sledje.com';
+const NOTIFY_FROM = 'notifications@sledje.com';
+
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function buildNotificationEmail(problem: string, email: string, submittedAt: string) {
+  const safeProblem = escapeHtml(problem).replace(/\n/g, '<br />');
+  const safeEmail = email ? escapeHtml(email) : null;
+
+  const html = `
+    <div style="font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 560px; margin: 0 auto; color: #1C1A17;">
+      <h2 style="color: #7A1F2B; font-size: 18px; margin-bottom: 4px;">New problem-capture submission</h2>
+      <p style="color: #6B6560; font-size: 13px; margin-top: 0;">${escapeHtml(submittedAt)}</p>
+      <div style="background: #FDFDFD; border: 1px solid #E5E1DB; border-left: 3px solid #7A1F2B; border-radius: 8px; padding: 16px; margin: 16px 0;">
+        <p style="margin: 0; white-space: pre-wrap;">${safeProblem}</p>
+      </div>
+      <p style="font-size: 14px;">
+        <strong>Reply-to email:</strong>
+        ${safeEmail ? `<a href="mailto:${safeEmail}" style="color: #7A1F2B;">${safeEmail}</a>` : '<em>not provided</em>'}
+      </p>
+    </div>
+  `.trim();
+
+  const text = [
+    'New problem-capture submission',
+    submittedAt,
+    '',
+    problem,
+    '',
+    `Reply-to email: ${email || 'not provided'}`,
+  ].join('\n');
+
+  return { html, text };
 }
 
 interface InterestPayload {
@@ -73,6 +116,24 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     key,
     JSON.stringify({ problem, email: email || null, submittedAt }),
   );
+
+  if (env.EMAIL) {
+    const { html, text } = buildNotificationEmail(problem, email, submittedAt);
+    try {
+      await env.EMAIL.send({
+        to: NOTIFY_TO,
+        from: { email: NOTIFY_FROM, name: 'Sledje website' },
+        ...(email ? { replyTo: email } : {}),
+        subject: 'New problem-capture submission',
+        html,
+        text,
+      });
+    } catch (error) {
+      // KV already has the submission, so a failed notification email
+      // shouldn't fail the user's request — just log it for follow-up.
+      console.error('Failed to send interest notification email:', error);
+    }
+  }
 
   return jsonResponse({ ok: true }, 200);
 };

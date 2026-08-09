@@ -138,9 +138,13 @@ export const socials = {
 The form (`InterestForm.astro`) does a plain `fetch('/api/interest', { method: 'POST' })`
 with `{ problem, email, company }` (`company` is an honeypot field, always
 empty for real users). The handler is a Cloudflare Pages Function at
-`functions/api/interest.ts`, which validates the payload and writes each
+`functions/api/interest.ts`, which validates the payload, writes each
 submission to a KV namespace as its own key
-(`interest:<ISO timestamp>:<uuid>` → `{ problem, email, submittedAt }`).
+(`interest:<ISO timestamp>:<uuid>` → `{ problem, email, submittedAt }`), and
+emails a formatted copy to `info@sledje.com` via the `EMAIL` binding
+([Cloudflare Email Service](https://developers.cloudflare.com/email-service/)).
+A failed send is logged but never fails the request — KV already has the
+submission either way.
 
 A static Astro build plus Pages Functions was the deliberately lightest
 "Cloudflare full-stack" option here — it doesn't require adding an Astro
@@ -155,8 +159,16 @@ SSR adapter, so `astro build` still produces a plain static `dist/`.
    → Functions → KV namespace bindings** → add `INTEREST_KV` pointing at
    the same namespace. (`wrangler.toml`'s binding only covers local
    `wrangler pages dev`; the dashboard binding is what production reads.)
-3. Deploy with `npm run pages:deploy`, or connect the repo in the
-   dashboard for git-based deploys.
+3. `wrangler email sending enable sledje.com` — onboards the domain so
+   `notifications@sledje.com` (the `from` address in
+   `functions/api/interest.ts`) is allowed to send. In the Cloudflare
+   dashboard, this is **Email → Email Sending**.
+4. Deploy with `npm run pages:deploy`, or connect the repo in the
+   dashboard for git-based deploys. The `[[send_email]]` binding in
+   `wrangler.toml` covers local `wrangler pages dev`; for the deployed
+   project, also add a matching "Send Email" binding named `EMAIL` under
+   **Settings → Functions → Bindings**, since (like the KV binding above)
+   `wrangler.toml` doesn't configure production.
 
 **Reading submissions back out:** `wrangler kv key list --binding=INTEREST_KV`
 to list keys, `wrangler kv key get --binding=INTEREST_KV "<key>"` to read

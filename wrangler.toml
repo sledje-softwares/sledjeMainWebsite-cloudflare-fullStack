@@ -5,7 +5,8 @@
 #
 # Setup: see README.md → "Wiring the problem-capture form".
 
-name = "sledje-main-website"
+
+name = 'sledjemainwebsite-cloudflare-fullstack'
 pages_build_output_dir = "dist"
 compatibility_date = "2025-01-01"
 
@@ -18,3 +19,9 @@ compatibility_date = "2025-01-01"
 binding = "INTEREST_KV"
 id = "REPLACE_WITH_KV_NAMESPACE_ID"
 preview_id = "REPLACE_WITH_KV_PREVIEW_NAMESPACE_ID"
+
+# Forwards each problem-capture submission to info@sledje.com. Requires
+# the sending domain to be onboarded first: see README.md → "Wiring the
+# problem-capture form".
+[[send_email]]
+name = "EMAIL"

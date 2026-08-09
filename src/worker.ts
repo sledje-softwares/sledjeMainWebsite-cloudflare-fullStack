@@ -23,7 +23,7 @@ export interface Env {
   ZOHO_FROM_ADDRESS: string;
 }
 
-const NOTIFY_TO = 'info@sledje.com';
+const NOTIFY_TO = 'general@sledje.com';
 
 /**
  * Zoho Mail send, called over plain HTTPS fetch() — no Cloudflare
@@ -40,7 +40,7 @@ async function getZohoAccessToken(env: Env): Promise<string> {
     grant_type: 'refresh_token',
   });
 
-  const response = await fetch('https://accounts.zoho.com/oauth/v2/token', {
+  const response = await fetch('https://accounts.zoho.in/oauth/v2/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: params.toString(),
@@ -60,12 +60,12 @@ async function getZohoAccessToken(env: Env): Promise<string> {
 
 async function sendZohoMail(
   env: Env,
-  opts: { to: string; subject: string; html: string; replyTo?: string },
+  opts: { to: string; subject: string; html: string },
 ): Promise<void> {
   const accessToken = await getZohoAccessToken(env);
 
   const response = await fetch(
-    `https://mail.zoho.com/api/accounts/${env.ZOHO_ACCOUNT_ID}/messages`,
+    `https://mail.zoho.in/api/accounts/${env.ZOHO_ACCOUNT_ID}/messages`,
     {
       method: 'POST',
       headers: {
@@ -75,7 +75,9 @@ async function sendZohoMail(
       body: JSON.stringify({
         fromAddress: env.ZOHO_FROM_ADDRESS,
         toAddress: opts.to,
-        ...(opts.replyTo ? { replyTo: opts.replyTo } : {}),
+        // Zoho requires replyTo to be a pre-verified address, which a
+        // site visitor's email never is — the submitter's address is
+        // shown as a mailto: link in the body instead (see below).
         subject: opts.subject,
         content: opts.html,
         mailFormat: 'html',
@@ -187,7 +189,6 @@ async function handleInterestPost(request: Request, env: Env): Promise<Response>
         to: NOTIFY_TO,
         subject: 'New problem-capture submission',
         html,
-        ...(email ? { replyTo: email } : {}),
       });
     } catch (error) {
       // KV already has the submission, so a failed notification email

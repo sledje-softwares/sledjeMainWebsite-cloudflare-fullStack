@@ -141,7 +141,7 @@ empty for real users). The handler is a Cloudflare Pages Function at
 `functions/api/interest.ts`, which validates the payload, writes each
 submission to a KV namespace as its own key
 (`interest:<ISO timestamp>:<uuid>` → `{ problem, email, submittedAt }`), and
-emails a formatted copy to `info@sledje.com` via the `EMAIL` binding
+emails a formatted copy to `general@sledje.com` via the `EMAIL` binding
 ([Cloudflare Email Service](https://developers.cloudflare.com/email-service/)).
 A failed send is logged but never fails the request — KV already has the
 submission either way.
@@ -160,7 +160,7 @@ SSR adapter, so `astro build` still produces a plain static `dist/`.
    the same namespace. (`wrangler.toml`'s binding only covers local
    `wrangler pages dev`; the dashboard binding is what production reads.)
 3. `wrangler email sending enable sledje.com` — onboards the domain so
-   `notifications@sledje.com` (the `from` address in
+   `general@sledje.com` (the `from` address in
    `functions/api/interest.ts`) is allowed to send. In the Cloudflare
    dashboard, this is **Email → Email Sending**.
 4. Deploy with `npm run pages:deploy`, or connect the repo in the

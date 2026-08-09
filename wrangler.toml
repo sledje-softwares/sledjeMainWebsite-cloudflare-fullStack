@@ -19,8 +19,8 @@ binding = "ASSETS"
 # ever manage bindings there instead of via this file.
 [[kv_namespaces]]
 binding = "INTEREST_KV"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
-preview_id = "REPLACE_WITH_KV_PREVIEW_NAMESPACE_ID"
+id = "6cee06721dc34017a8fb84cf1eb37794"
+preview_id = "29309893234e406ea00a63d3b930f335"
 
 # Email is sent via the Zoho Mail REST API (plain fetch(), no Cloudflare
 # binding — Cloudflare's own Email Service isn't available on this

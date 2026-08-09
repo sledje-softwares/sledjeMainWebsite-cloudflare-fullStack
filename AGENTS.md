@@ -19,4 +19,4 @@ Consult these guides before working on related tasks:
 - [Using React, Vue, Svelte, or other framework components](https://docs.astro.build/en/guides/framework-components/)
 - [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
-- [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+- [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/) a
